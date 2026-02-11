@@ -1,0 +1,11 @@
+# GitHub Pages Jekyll 配置
+title: AI新闻日报
+description: 每日自动生成的AI新闻汇总
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+  - jekyll-remote-theme
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+show_downloads: false
