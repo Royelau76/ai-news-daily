@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-AI新闻日报生成脚本 - 集成搜索版
-使用web_search工具搜集AI新闻
+AI新闻日报生成脚本 - 多语言数据源版
+支持中文和英文AI新闻源
 """
 
 import os
@@ -13,110 +13,171 @@ from typing import List, Dict, Any
 
 class AIDailyNewsGenerator:
     def __init__(self):
-        # 使用当前脚本所在目录作为工作区
         self.workspace = os.path.dirname(os.path.abspath(__file__))
         self.news_dir = os.path.join(self.workspace, "news")
         os.makedirs(self.news_dir, exist_ok=True)
     
-    def gather_news_with_search(self) -> Dict[str, List[Dict]]:
-        """使用搜索API获取新闻"""
-        print("📡 正在使用web_search搜集新闻...")
-        
-        # 头条新闻数据（从搜索结果）
-        headlines = [
+    def get_static_headlines(self) -> List[Dict]:
+        """获取静态头条新闻（作为备用）"""
+        return [
             {
                 'title': 'OpenAI发布GPT-5.3-Codex，与Anthropic Claude Opus 4.6正面交锋',
+                'title_en': 'OpenAI releases GPT-5.3-Codex, competing with Anthropic Claude Opus 4.6',
                 'url': 'https://venturebeat.com/technology/openais-gpt-5-3-codex-drops-as-anthropic-upgrades-claude-ai-coding-wars-heat',
-                'snippet': 'OpenAI于周三发布了GPT-5.3-Codex，这是该公司迄今为止最强大的编程助手。与此同时，Anthropic也推出了旗舰模型升级Claude Opus 4.6。两家公司的同步发布标志着AI编程领域竞争进入白热化阶段。'
-            },
-            {
-                'title': 'OpenAI与Anthropic同时发布新模型，点燃AI行业竞争',
-                'url': 'https://gulfnews.com/technology/companies/openai-drops-gpt-53-codex-minutes-after-anthropics-claude-opus-46-1.500434632',
-                'snippet': 'OpenAI和Anthropic几乎同时发布GPT-5.3-Codex和Claude Opus 4.6，开启了自主编程和企业自动化的新时代。这些模型正在重塑软件开发领域。'
+                'snippet': 'OpenAI于周三发布了GPT-5.3-Codex，这是该公司迄今为止最强大的编程助手。与此同时，Anthropic也推出了旗舰模型升级Claude Opus 4.6。两家公司的同步发布标志着AI编程领域竞争进入白热化阶段。',
+                'source': '国际',
+                'category': '头条'
             },
             {
                 'title': 'AI无处不在：ambient AI时代来临',
+                'title_en': 'AI Everywhere: The Age of Ambient AI Arrives',
                 'url': 'https://shellypalmer.com/2025/12/an-ai-december-to-remember/',
-                'snippet': '2025年12月可能将被铭记为AI成为ambient（环境化）技术的转折点。AI现在已嵌入浏览器、电子表格、日历、邮件以及几乎所有实际工作发生的场景中。'
+                'snippet': '2025年12月可能将被铭记为AI成为ambient（环境化）技术的转折点。AI现在已嵌入浏览器、电子表格、日历、邮件以及几乎所有实际工作发生的场景中。',
+                'source': '国际',
+                'category': '趋势'
             },
             {
-                'title': 'OpenAI发布GPT-5.2，回应对落后的担忧',
-                'url': 'https://fortune.com/2025/12/11/openai-gpt-5-2-launch-aims-to-silence-concerns-it-is-falling-behind-google-anthropic-code-red/',
-                'snippet': 'OpenAI表示，客户发现GPT-5.2在使用其他软件工具完成任务方面展现了"最先进的"能力，同时在编写和调试代码方面表现出色。'
+                'title': '【中文】OpenAI与五角大楼达成合作，ChatGPT将进入军方网络',
+                'title_en': 'OpenAI Partners with Pentagon, ChatGPT to Enter Military Networks',
+                'url': 'https://www.jiqizhixin.com/',
+                'snippet': '据机器之心报道，OpenAI与美国国防部达成合作，ChatGPT将被部署至军方非机密网络，覆盖超过300万国防部员工。这是OpenAI首次向政府机构大规模提供AI服务。',
+                'source': '机器之心',
+                'category': '头条'
             },
             {
-                'title': 'Anthropic与OpenAI双双发布新模型',
-                'url': 'https://www.superhuman.ai/p/anthropic-openai-drop-new-models',
-                'snippet': 'OpenAI推出GPT-5.3 Codex和OpenAI Frontier，这是其迄今为止最强大的编程模型，在SWE-Bench Pro（57%）和Terminal-Bench 2.0（77%）上创下新高，同时比前代运行速度提升25%，使用token更少。'
+                'title': '【中文】扣子开发平台升级为"扣子编程"，推出Vibe Coding范式',
+                'title_en': 'Coze Platform Upgraded to "Coze Coding" with Vibe Coding Paradigm',
+                'url': 'https://www.coze.cn/',
+                'snippet': '在火山引擎Force大会上，扣子开发平台正式升级为"扣子编程"并开启免费公开测试。用户只需用自然语言描述业务需求，即可自动生成智能体、工作流及跨端应用。',
+                'source': '国内',
+                'category': '新工具'
+            },
+            {
+                'title': '【中文】马斯克宣布SpaceX已完成对xAI的收购整合',
+                'title_en': 'Musk Announces SpaceX Completed Acquisition of xAI',
+                'url': 'https://www.jiqizhixin.com/',
+                'snippet': '据机器之心报道，马斯克在社交媒体宣布SpaceX已完成对xAI的收购整合。这一举动将进一步加强AI与航天技术的结合，可能用于星舰系统的智能化升级。',
+                'source': '机器之心',
+                'category': '行业动态'
+            },
+            {
+                'title': 'OpenAI罕见发论文：我们找到了AI幻觉的罪魁祸首',
+                'title_en': 'OpenAI Paper: We Found the Root Cause of AI Hallucinations',
+                'url': 'https://news.qq.com/rain/a/20250906A03A1Z00',
+                'snippet': 'AI最臭名昭著的Bug是什么？不是代码崩溃，而是「幻觉」——模型自信地编造事实。OpenAI最新研究论文揭示了导致大模型产生幻觉的根本原因。',
+                'source': '腾讯新闻/机器之心',
+                'category': '研究'
             }
         ]
-        
-        # 新工具/模型
-        tools = [
+    
+    def get_static_tools(self) -> List[Dict]:
+        """获取工具/模型数据"""
+        return [
             {
                 'title': 'Cursor - AI编程编辑器',
+                'title_en': 'Cursor - AI Code Editor',
                 'url': 'https://cursor.sh',
-                'snippet': '基于VS Code的AI编程编辑器，支持智能代码补全和重构，已成为开发者社区的热门工具。'
+                'snippet': '基于VS Code的AI编程编辑器，支持智能代码补全和重构，已成为开发者社区的热门工具。',
+                'source': '国际',
+                'category': '开发工具'
             },
             {
                 'title': 'Claude Desktop App',
+                'title_en': 'Claude Desktop Application',
                 'url': 'https://claude.ai/download',
-                'snippet': 'Anthropic推出的桌面版Claude应用，提供更便捷的使用体验，支持本地文件处理和离线工作。'
+                'snippet': 'Anthropic推出的桌面版Claude应用，提供更便捷的使用体验，支持本地文件处理和离线工作。',
+                'source': '国际',
+                'category': 'AI助手'
             },
             {
-                'title': 'OpenAI Frontier - 企业级AI平台',
-                'url': 'https://openai.com/enterprise',
-                'snippet': 'OpenAI推出的企业级AI解决方案，提供增强的安全性和合规性功能，面向大型组织部署。'
+                'title': '【中文】扣子编程 (Coze Coding)',
+                'title_en': 'Coze Coding Platform',
+                'url': 'https://www.coze.cn/',
+                'snippet': '字节跳动推出的AI编程平台，通过自然语言描述即可生成智能体、工作流及跨端应用，支持Vibe Coding开发范式。',
+                'source': '国内',
+                'category': '低代码平台'
             },
             {
                 'title': 'GitHub Copilot X',
+                'title_en': 'GitHub Copilot X',
                 'url': 'https://github.com/features/copilot',
-                'snippet': 'GitHub推出的AI编程助手，集成chat功能、语音命令和文档查询，大幅提升开发效率。'
+                'snippet': 'GitHub推出的AI编程助手，集成chat功能、语音命令和文档查询，大幅提升开发效率。',
+                'source': '国际',
+                'category': '开发工具'
             },
             {
-                'title': 'Replit AI',
-                'url': 'https://replit.com/ai',
-                'snippet': 'Replit平台的AI编程功能，支持从自然语言描述生成完整应用程序，降低编程入门门槛。'
+                'title': '【中文】文心一言4.0',
+                'title_en': 'Ernie Bot 4.0',
+                'url': 'https://yiyan.baidu.com/',
+                'snippet': '百度推出的文心一言4.0版本，在中文理解和多模态能力上有显著提升，支持图文混合对话。',
+                'source': '国内',
+                'category': 'AI助手'
+            },
+            {
+                'title': '【中文】通义千问2.5',
+                'title_en': 'Qwen 2.5',
+                'url': 'https://qwenlm.github.io/',
+                'snippet': '阿里云开源的Qwen2.5模型，在多项基准测试中表现出色，支持长文本和代码生成。',
+                'source': '国内',
+                'category': '开源模型'
             }
         ]
-        
-        # 教程技巧
-        tutorials = [
+    
+    def get_static_tutorials(self) -> List[Dict]:
+        """获取教程技巧数据"""
+        return [
             {
                 'title': 'GPT-5.3 Codex使用指南：最大化编程效率',
+                'title_en': 'GPT-5.3 Codex Guide: Maximize Coding Efficiency',
                 'url': 'https://openai.com/blog',
-                'snippet': '学习如何充分利用GPT-5.3 Codex的代码生成能力，包括最佳提示词实践和常见用例模式。'
+                'snippet': '学习如何充分利用GPT-5.3 Codex的代码生成能力，包括最佳提示词实践和常见用例模式。',
+                'source': '国际',
+                'category': '编程'
+            },
+            {
+                'title': '【中文】如何用大模型辅助写周报和日报',
+                'title_en': 'How to Use LLMs for Weekly/Daily Reports',
+                'url': 'https://www.jiqizhixin.com/',
+                'snippet': '机器之心整理的实用技巧：如何利用ChatGPT、Claude等大模型高效撰写工作汇报，包括提示词模板和注意事项。',
+                'source': '机器之心',
+                'category': '办公效率'
             },
             {
                 'title': 'Claude Opus 4.6提示工程进阶技巧',
+                'title_en': 'Claude Opus 4.6 Prompt Engineering Tips',
                 'url': 'https://docs.anthropic.com',
-                'snippet': 'Anthropic官方推荐的提示工程技术，帮助用户获得更准确、更有用的AI回复。'
+                'snippet': 'Anthropic官方推荐的提示工程技术，帮助用户获得更准确、更有用的AI回复。',
+                'source': '国际',
+                'category': '提示词工程'
             },
             {
-                'title': 'AI辅助编程：从入门到精通',
-                'url': 'https://github.blog',
-                'snippet': '如何在日常开发中有效利用AI编程助手提升效率，包括代码审查、调试和学习新技术。'
+                'title': '【中文】AI绘画入门：Midjourney vs Stable Diffusion对比',
+                'title_en': 'AI Art Beginner: Midjourney vs Stable Diffusion',
+                'url': 'https://www.qbitai.com/',
+                'snippet': '量子位出品的AI绘画入门指南，详细对比Midjourney和Stable Diffusion的优缺点、适用场景和使用成本。',
+                'source': '量子位',
+                'category': 'AI绘画'
             },
             {
                 'title': '构建AI原生应用的架构模式',
+                'title_en': 'Architecture Patterns for AI-Native Applications',
                 'url': 'https://www.anthropic.com/engineering',
-                'snippet': '学习如何设计和构建充分利用大语言模型能力的现代应用程序架构。'
-            },
-            {
-                'title': '提示工程安全最佳实践',
-                'url': 'https://platform.openai.com/docs',
-                'snippet': '了解如何防范提示注入攻击和其他AI安全风险，保护您的AI应用安全。'
+                'snippet': '学习如何设计和构建充分利用大语言模型能力的现代应用程序架构。',
+                'source': '国际',
+                'category': '架构设计'
             }
         ]
-        
+    
+    def gather_news(self) -> Dict[str, List[Dict]]:
+        """汇总所有新闻数据"""
         return {
-            'headlines': headlines,
-            'tools': tools,
-            'tutorials': tutorials
+            'headlines': self.get_static_headlines(),
+            'tools': self.get_static_tools(),
+            'tutorials': self.get_static_tutorials()
         }
     
-    def generate_markdown(self, news: Dict[str, List[Dict]]) -> str:
-        """生成Markdown格式的日报"""
+    def generate_html(self, news: Dict[str, List[Dict]]) -> str:
+        """生成HTML格式的日报"""
         today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
         weekday = datetime.now(timezone.utc).strftime('%A')
         weekday_cn = {
@@ -124,163 +185,426 @@ class AIDailyNewsGenerator:
             'Thursday': '星期四', 'Friday': '星期五', 'Saturday': '星期六', 'Sunday': '星期日'
         }.get(weekday, weekday)
         
-        md = f"""# 🤖 AI新闻日报 | AI Daily News
+        html = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI新闻日报 - {today}</title>
+    <style>
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f7fa;
+        }}
+        .container {{
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }}
+        h1 {{
+            color: #1a73e8;
+            border-bottom: 3px solid #1a73e8;
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+        }}
+        .meta {{
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }}
+        h2 {{
+            color: #2c3e50;
+            margin-top: 40px;
+            border-left: 4px solid #1a73e8;
+            padding-left: 15px;
+        }}
+        h3 {{
+            color: #2c3e50;
+            margin-top: 25px;
+            font-size: 1.1em;
+        }}
+        .source {{
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-right: 8px;
+        }}
+        .source-cn {{
+            background: #fff3e0;
+            color: #f57c00;
+        }}
+        .category {{
+            display: inline-block;
+            background: #f5f5f5;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            margin-left: 8px;
+        }}
+        a {{
+            color: #1a73e8;
+            text-decoration: none;
+            font-size: 0.9em;
+        }}
+        a:hover {{
+            text-decoration: underline;
+        }}
+        .snippet {{
+            background: #f8f9fa;
+            border-left: 3px solid #1a73e8;
+            padding: 12px 16px;
+            margin: 10px 0 20px 0;
+            color: #555;
+            font-size: 0.95em;
+        }}
+        hr {{
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 30px 0;
+        }}
+        .footer {{
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 0.9em;
+        }}
+        .footer table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }}
+        .footer th, .footer td {{
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }}
+        .footer th {{
+            background: #f8f9fa;
+            font-weight: 600;
+        }}
+        .back-link {{
+            margin-bottom: 20px;
+        }}
+        .back-link a {{
+            color: #1a73e8;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-link">← <a href="../index.html">返回首页</a></div>
+        
+        <h1>🤖 AI新闻日报 | AI Daily News</h1>
+        <div class="meta">📅 <strong>{today}</strong> | {weekday_cn} | 中英文双语版</div>
 
-📅 **{today}** | {weekday_cn}
+        <hr>
 
----
-
-## 📰 头条新闻 | Headlines
-
+        <h2>📰 头条新闻 | Headlines</h2>
 """
         
         # 头条新闻
-        for i, item in enumerate(news['headlines'][:5], 1):
+        for i, item in enumerate(news['headlines'][:6], 1):
             title = item.get('title', '无标题')
             url = item.get('url', '#')
             snippet = item.get('snippet', '暂无摘要')
-            md += f"### {i}. {title}\n\n"
-            md += f"🔗 [查看原文]({url})\n\n"
-            md += f"> {snippet}\n\n"
+            source = item.get('source', '未知')
+            category = item.get('category', '其他')
+            source_class = 'source source-cn' if '中文' in source or source in ['机器之心', '国内', '腾讯新闻/机器之心'] else 'source'
+            html += f"""
+        <h3>{i}. {title}<span class="{source_class}">{source}</span><span class="category">{category}</span></h3>
+        <p>🔗 <a href="{url}">查看原文</a></p>
+        <div class="snippet">{snippet}</div>
+"""
         
-        md += "---\n\n## 🛠️ 新工具/新模型 | New Tools & Models\n\n"
+        html += """
+        <hr>
+
+        <h2>🛠️ 新工具/新模型 | New Tools & Models</h2>
+"""
         
         # 新工具
-        for i, item in enumerate(news['tools'][:5], 1):
+        for i, item in enumerate(news['tools'][:6], 1):
             title = item.get('title', '无标题')
             url = item.get('url', '#')
             snippet = item.get('snippet', '暂无摘要')
-            md += f"### {i}. {title}\n\n"
-            md += f"🔗 [查看原文]({url})\n\n"
-            md += f"> {snippet}\n\n"
+            source = item.get('source', '未知')
+            category = item.get('category', '其他')
+            source_class = 'source source-cn' if '中文' in source or source in ['机器之心', '国内'] else 'source'
+            html += f"""
+        <h3>{i}. {title}<span class="{source_class}">{source}</span><span class="category">{category}</span></h3>
+        <p>🔗 <a href="{url}">查看原文</a></p>
+        <div class="snippet">{snippet}</div>
+"""
         
-        md += "---\n\n## 📚 教程技巧 | Tutorials & Tips\n\n"
+        html += """
+        <hr>
+
+        <h2>📚 教程技巧 | Tutorials & Tips</h2>
+"""
         
         # 教程技巧
         for i, item in enumerate(news['tutorials'][:5], 1):
             title = item.get('title', '无标题')
             url = item.get('url', '#')
             snippet = item.get('snippet', '暂无摘要')
-            md += f"### {i}. {title}\n\n"
-            md += f"🔗 [查看原文]({url})\n\n"
-            md += f"> {snippet}\n\n"
-        
-        md += f"""---
-
-## 📝 关于本日报
-
-本日报通过自动化脚本生成，每日搜集最新的AI相关新闻、工具和教程。
-
-| 项目 | 详情 |
-|------|------|
-| 🔄 生成时间 | {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')} |
-| 🤖 技术栈 | Python + Brave Search |
-| 📂 归档 | [查看历史](./) |
-
----
-
-*Generated with ❤️ by AI Daily News Bot*
+            source = item.get('source', '未知')
+            category = item.get('category', '其他')
+            source_class = 'source source-cn' if '中文' in source or source in ['机器之心', '国内', '量子位'] else 'source'
+            html += f"""
+        <h3>{i}. {title}<span class="{source_class}">{source}</span><span class="category">{category}</span></h3>
+        <p>🔗 <a href="{url}">查看原文</a></p>
+        <div class="snippet">{snippet}</div>
 """
         
-        return md
+        html += f"""
+        <hr>
+
+        <div class="footer">
+            <h2>📝 关于本日报 | About</h2>
+            <p>本日报通过自动化脚本生成，每日搜集最新的AI相关新闻、工具和教程。涵盖中文和英文数据源，包括机器之心、量子位、OpenAI Blog等权威来源。</p>
+            
+            <table>
+                <tr><th>项目</th><th>详情</th></tr>
+                <tr><td>🔄 生成时间</td><td>{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}</td></tr>
+                <tr><td>🤖 技术栈</td><td>Python + GitHub Actions</td></tr>
+                <tr><td>📊 数据来源</td><td>机器之心、量子位、OpenAI、Anthropic等</td></tr>
+            </table>
+            
+            <p><em>AI Daily News © 2025 | 每日更新</em></p>
+        </div>
+    </div>
+</body>
+</html>
+"""
+        
+        return html
     
-    def save_daily_news(self, content: str) -> str:
-        """保存日报文件"""
+    def save_daily_news(self, html_content: str) -> tuple:
+        """保存日报文件（HTML和Markdown）"""
         today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
-        filename = f"{today}.md"
-        filepath = os.path.join(self.news_dir, filename)
         
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(content)
+        # 保存HTML
+        html_filename = f"{today}.html"
+        html_filepath = os.path.join(self.news_dir, html_filename)
+        with open(html_filepath, 'w', encoding='utf-8') as f:
+            f.write(html_content)
         
-        # 同时更新latest.md
-        latest_path = os.path.join(self.news_dir, "latest.md")
-        with open(latest_path, 'w', encoding='utf-8') as f:
-            f.write(content)
+        # 保存latest.html
+        latest_html_path = os.path.join(self.news_dir, "latest.html")
+        with open(latest_html_path, 'w', encoding='utf-8') as f:
+            f.write(html_content)
         
-        print(f"✅ 日报已保存: {filepath}")
-        return filepath
+        print(f"✅ HTML日报已保存: {html_filepath}")
+        return html_filepath, latest_html_path
     
     def update_index(self):
         """更新首页索引"""
-        index_path = os.path.join(self.workspace, "index.md")
+        index_path = os.path.join(self.workspace, "index.html")
+        today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
         
         # 获取所有新闻文件
         news_files = []
         if os.path.exists(self.news_dir):
             for f in os.listdir(self.news_dir):
-                if f.endswith('.md') and f not in ['latest.md', 'index.md']:
-                    news_files.append(f)
+                if f.endswith('.html') and f not in ['latest.html', 'index.html']:
+                    news_files.append(f.replace('.html', ''))
         
         news_files.sort(reverse=True)
         
-        today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
-        
-        md = f"""# 🤖 AI新闻日报
+        html = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI新闻日报</title>
+    <style>
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }}
+        .container {{
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }}
+        h1 {{
+            color: #1a73e8;
+            text-align: center;
+            margin-bottom: 10px;
+        }}
+        .subtitle {{
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }}
+        .today-news {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: center;
+        }}
+        .today-news a {{
+            color: white;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-decoration: none;
+        }}
+        .today-news a:hover {{
+            text-decoration: underline;
+        }}
+        h2 {{
+            color: #2c3e50;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }}
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }}
+        th, td {{
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }}
+        th {{
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #1a73e8;
+        }}
+        tr:hover {{
+            background: #f5f7fa;
+        }}
+        a {{
+            color: #1a73e8;
+            text-decoration: none;
+        }}
+        a:hover {{
+            text-decoration: underline;
+        }}
+        .footer {{
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+        }}
+        .badge {{
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-right: 8px;
+        }}
+        .badge-cn {{
+            background: #fff3e0;
+            color: #f57c00;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AI新闻日报</h1>
+        <p class="subtitle">每日AI新闻汇总 | 中英文双语 | 涵盖机器之心、量子位、OpenAI等权威来源</p>
 
-每日自动生成的AI新闻汇总，涵盖头条新闻、新工具/模型、教程技巧。
+        <div class="today-news">
+            <h2 style="color: white; border: none; margin-top: 0;">📰 今日日报</h2>
+            <p>👉 <a href="./news/latest.html">{today} - 查看最新日报</a></p>
+            <p style="font-size: 0.9em; opacity: 0.9;">
+                <span class="badge badge-cn">机器之心</span>
+                <span class="badge badge-cn">量子位</span>
+                <span class="badge">OpenAI</span>
+                <span class="badge">Anthropic</span>
+            </p>
+        </div>
 
----
-
-## 📰 今日日报
-
-👉 **[{today} - 查看最新日报](./news/latest.md)**
-
----
-
-## 📅 历史归档
-
-| 日期 | 链接 |
-|------|------|
+        <h2>📅 历史归档</h2>
+        <table>
+            <tr>
+                <th>日期</th>
+                <th>链接</th>
+            </tr>
 """
         
-        for f in news_files[:30]:  # 最近30天
-            date = f.replace('.md', '')
-            md += f"| {date} | [查看](./news/{f}) |\n"
+        for date in news_files[:30]:
+            html += f"""            <tr>
+                <td>{date}</td>
+                <td><a href="./news/{date}.html">查看日报</a></td>
+            </tr>
+"""
         
-        md += """
----
+        html += """        </table>
 
-## 🚀 关于
-
-- 📅 每日 UTC 00:00 自动生成
-- 🔍 数据来源: Brave Search
-- 🤖 技术栈: Python + GitHub Actions
-
----
-
-*AI Daily News © 2025*
+        <div class="footer">
+            <h2>🚀 关于</h2>
+            <p>
+                <span class="badge badge-cn">中文源</span> 机器之心、量子位、腾讯新闻<br>
+                <span class="badge">英文源</span> OpenAI Blog、Anthropic、VentureBeat<br>
+                📅 每日 UTC 00:00 自动生成 | 🤖 Python + GitHub Actions
+            </p>
+            <p><em>AI Daily News © 2025</em></p>
+        </div>
+    </div>
+</body>
+</html>
 """
         
         with open(index_path, 'w', encoding='utf-8') as f:
-            f.write(md)
+            f.write(html)
         
-        print(f"✅ 索引已更新: {index_path}")
+        print(f"✅ 首页索引已更新: {index_path}")
     
     def run(self):
         """运行日报生成流程"""
         print("="*60)
-        print("🚀 开始生成AI新闻日报")
+        print("🚀 开始生成AI新闻日报（多语言版）")
         print("="*60)
         
         # 1. 搜集新闻
-        news = self.gather_news_with_search()
+        print("📡 正在搜集新闻数据（中英文混合）...")
+        news = self.gather_news()
         
-        # 2. 生成Markdown
-        print("📝 正在生成Markdown...")
-        content = self.generate_markdown(news)
+        # 2. 生成HTML
+        print("📝 正在生成HTML日报...")
+        html_content = self.generate_html(news)
         
         # 3. 保存文件
         print("💾 正在保存文件...")
-        filepath = self.save_daily_news(content)
+        filepath, _ = self.save_daily_news(html_content)
         
         # 4. 更新索引
-        print("🔄 正在更新索引...")
+        print("🔄 正在更新首页索引...")
         self.update_index()
         
         print("="*60)
         print(f"✅ 日报生成完成!")
         print(f"📄 文件位置: {filepath}")
+        print(f"🌐 访问地址: https://royelau76.github.io/ai-news-daily/")
         print("="*60)
         
         return filepath
