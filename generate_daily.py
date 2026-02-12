@@ -123,6 +123,60 @@ class AIDailyNewsGenerator:
             }
         ]
     
+    def get_openclaw_news(self) -> List[Dict]:
+        """获取OpenClaw技术相关内容"""
+        return [
+            {
+                'title': 'OpenClaw爆火两周后，它的用法已经比科幻世界还离谱了',
+                'url': 'https://www.huxiu.com/article/4833948.html',
+                'snippet': '硅星人报道：OpenClaw在短时间内迅速走红，用户们开发出了各种出人意料的用法，从自动化工作流到智能助手，应用场景不断拓展。',
+                'source': '虎嗅网/硅星人',
+                'category': '应用案例'
+            },
+            {
+                'title': '玩转OpenClaw｜云上OpenClaw(Clawdbot)一键秒级部署指南',
+                'url': 'https://cloud.tencent.com/developer/article/2626666',
+                'snippet': '腾讯云Lighthouse官方教程：详细介绍如何在腾讯云轻量应用服务器上一键部署OpenClaw，支持QQ、企业微信、飞书、钉钉等多种IM接入。',
+                'source': '腾讯云开发者社区',
+                'category': '部署教程'
+            },
+            {
+                'title': '玩转OpenClaw｜云上OpenClaw快速接入飞书指南',
+                'url': 'https://cloud.tencent.com/developer/article/2626888',
+                'snippet': '详细指导如何为已部署的OpenClaw配置飞书通道，包括模型配置、飞书机器人创建和权限设置等步骤。',
+                'source': '腾讯云开发者社区',
+                'category': '接入教程'
+            },
+            {
+                'title': '玩转OpenClaw｜OpenClaw+Skills可以做什么？',
+                'url': 'https://cloud.tencent.com/developer/article/2627350',
+                'snippet': '介绍如何通过Skills扩展OpenClaw的能力边界，包括安装、使用和删除Skills的方法，让OpenClaw拥有更多实用功能。',
+                'source': '腾讯云开发者社区',
+                'category': '进阶技巧'
+            },
+            {
+                'title': '玩转OpenClaw｜如何访问OpenClaw WebUI',
+                'url': 'https://cloud.tencent.com/developer/article/2627344',
+                'snippet': '介绍两种安全访问OpenClaw WebUI的方式：通过OrcaTerm端口转发或本地SSH隧道，避免直接暴露公网端口带来的安全风险。',
+                'source': '腾讯云开发者社区',
+                'category': '安全配置'
+            },
+            {
+                'title': 'OpenClaw(Clawdbot)接入自定义大模型教程',
+                'url': 'https://cloud.tencent.com/developer/article/2627520',
+                'snippet': '详细教程：如何为OpenClaw配置自定义大模型，包括国内模型服务商的配置方法和注意事项。',
+                'source': '腾讯云开发者社区',
+                'category': '模型配置'
+            },
+            {
+                'title': '云上OpenClaw(Clawdbot)最全实践教程合辑',
+                'url': 'https://cloud.tencent.com/developer/article/2627104',
+                'snippet': '汇总所有OpenClaw相关教程，包括部署指南、接入QQ/企微/飞书/钉钉教程、Skills使用指南等完整资料。',
+                'source': '腾讯云开发者社区',
+                'category': '教程合集'
+            }
+        ]
+    
     def get_static_tutorials(self) -> List[Dict]:
         """获取教程技巧数据"""
         return [
@@ -173,7 +227,8 @@ class AIDailyNewsGenerator:
         return {
             'headlines': self.get_static_headlines(),
             'tools': self.get_static_tools(),
-            'tutorials': self.get_static_tutorials()
+            'tutorials': self.get_static_tutorials(),
+            'openclaw': self.get_openclaw_news()
         }
     
     def generate_html(self, news: Dict[str, List[Dict]]) -> str:
@@ -367,18 +422,39 @@ class AIDailyNewsGenerator:
         <div class="snippet">{snippet}</div>
 """
         
+        html += """
+        <hr>
+
+        <h2>🦾 OpenClaw技术 | OpenClaw Tech</h2>
+        <p style="color: #666; font-size: 0.9em; margin-top: -10px;">专注于OpenClaw的最新消息、部署教程与应用技巧 | 来源：腾讯云开发者社区、虎嗅网、36氪</p>
+"""
+        
+        # OpenClaw技术内容
+        for i, item in enumerate(news['openclaw'][:7], 1):
+            title = item.get('title', '无标题')
+            url = item.get('url', '#')
+            snippet = item.get('snippet', '暂无摘要')
+            source = item.get('source', '未知')
+            category = item.get('category', '其他')
+            source_class = 'source source-cn'
+            html += f"""
+        <h3>{i}. {title}<span class="{source_class}">{source}</span><span class="category">{category}</span></h3>
+        <p>🔗 <a href="{url}">查看原文</a></p>
+        <div class="snippet">{snippet}</div>
+"""
+        
         html += f"""
         <hr>
 
         <div class="footer">
             <h2>📝 关于本日报 | About</h2>
-            <p>本日报通过自动化脚本生成，每日搜集最新的AI相关新闻、工具和教程。涵盖中文和英文数据源，包括机器之心、量子位、OpenAI Blog等权威来源。</p>
+            <p>本日报通过自动化脚本生成，每日搜集最新的AI相关新闻、工具和教程。涵盖中文和英文数据源，包括机器之心、量子位、OpenAI Blog、腾讯云开发者社区等权威来源。</p>
             
             <table>
                 <tr><th>项目</th><th>详情</th></tr>
                 <tr><td>🔄 生成时间</td><td>{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}</td></tr>
                 <tr><td>🤖 技术栈</td><td>Python + GitHub Actions</td></tr>
-                <tr><td>📊 数据来源</td><td>机器之心、量子位、OpenAI、Anthropic等</td></tr>
+                <tr><td>📊 数据来源</td><td>机器之心、量子位、OpenAI、Anthropic、腾讯云开发者社区、虎嗅网、36氪</td></tr>
             </table>
             
             <p><em>AI Daily News © 2025 | 每日更新</em></p>
@@ -530,7 +606,7 @@ class AIDailyNewsGenerator:
 <body>
     <div class="container">
         <h1>🤖 AI新闻日报</h1>
-        <p class="subtitle">每日AI新闻汇总 | 中英文双语 | 涵盖机器之心、量子位、OpenAI等权威来源</p>
+        <p class="subtitle">每日AI新闻汇总 | 中英文双语 | 涵盖机器之心、量子位、OpenAI、腾讯云开发者社区、虎嗅网等权威来源</p>
 
         <div class="today-news">
             <h2 style="color: white; border: none; margin-top: 0;">📰 今日日报</h2>
@@ -540,8 +616,34 @@ class AIDailyNewsGenerator:
                 <span class="badge badge-cn">量子位</span>
                 <span class="badge">OpenAI</span>
                 <span class="badge">Anthropic</span>
+                <span class="badge badge-cn">腾讯云</span>
+                <span class="badge badge-cn">虎嗅</span>
             </p>
         </div>
+
+        <h2>📚 日报板块</h2>
+        <table>
+            <tr>
+                <th>板块</th>
+                <th>内容</th>
+            </tr>
+            <tr>
+                <td>📰 头条新闻</td>
+                <td>AI行业重磅消息、产品发布、公司动态</td>
+            </tr>
+            <tr>
+                <td>🛠️ 新工具/新模型</td>
+                <td>最新AI工具、开源模型、生产力应用</td>
+            </tr>
+            <tr>
+                <td>📚 教程技巧</td>
+                <td>AI使用技巧、提示词工程、最佳实践</td>
+            </tr>
+            <tr>
+                <td>🦾 OpenClaw技术</td>
+                <td>OpenClaw部署教程、应用技巧、最新消息</td>
+            </tr>
+        </table>
 
         <h2>📅 历史归档</h2>
         <table>
@@ -563,8 +665,9 @@ class AIDailyNewsGenerator:
         <div class="footer">
             <h2>🚀 关于</h2>
             <p>
-                <span class="badge badge-cn">中文源</span> 机器之心、量子位、腾讯新闻<br>
+                <span class="badge badge-cn">中文源</span> 机器之心、量子位、腾讯新闻、腾讯云开发者社区、虎嗅网、36氪<br>
                 <span class="badge">英文源</span> OpenAI Blog、Anthropic、VentureBeat<br>
+                <span class="badge badge-cn">特色板块</span> 🦾 OpenClaw技术 - 部署教程、应用技巧、最新消息<br>
                 📅 每日 UTC 00:00 自动生成 | 🤖 Python + GitHub Actions
             </p>
             <p><em>AI Daily News © 2025</em></p>
