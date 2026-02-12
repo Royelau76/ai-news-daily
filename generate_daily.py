@@ -13,7 +13,8 @@ from typing import List, Dict, Any
 
 class AIDailyNewsGenerator:
     def __init__(self):
-        self.workspace = "/root/.openclaw/workspace/ai-news-daily"
+        # 使用当前脚本所在目录作为工作区
+        self.workspace = os.path.dirname(os.path.abspath(__file__))
         self.news_dir = os.path.join(self.workspace, "news")
         os.makedirs(self.news_dir, exist_ok=True)
     
