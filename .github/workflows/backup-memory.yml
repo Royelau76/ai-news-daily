@@ -1,0 +1,54 @@
+name: Backup Memory Files
+
+on:
+  schedule:
+    # 每天 UTC 02:00 运行 (北京时间 10:00)
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Create backup directory
+        run: mkdir -p memory-backup
+      
+      - name: Create backup README
+        run: |
+          cat > memory-backup/README.md << 'EOF'
+          # 🧠 记忆文件备份
+
+          ## 📅 自动备份
+
+          本目录包含 AI 助手的关键记忆文件备份。
+
+          ## 📁 文件说明
+
+          | 文件 | 说明 |
+          |------|------|
+          | MEMORY.md | 长期记忆、重要事件、学习总结 |
+          | IDENTITY.md | AI身份配置（名称、性格等） |
+          | USER.md | 用户信息、偏好 |
+          | SOUL.md | 核心人格、行为准则 |
+          | AGENTS.md | 代理配置、工作规范 |
+          | TOOLS.md | 工具配置、环境信息 |
+
+          ## 🔄 备份频率
+
+          - **自动备份**: 每天北京时间 10:00
+          - **手动触发**: 可在 Actions 页面手动运行
+
+          ---
+          *由 GitHub Actions 自动生成*
+          EOF
+      
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add memory-backup/
+          git commit -m "🧠 Daily memory backup - $(date +'%Y-%m-%d')" || echo "No changes"
+          git push
