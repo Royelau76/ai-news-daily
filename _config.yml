@@ -9,3 +9,6 @@ relative_links:
   enabled: true
   collections: true
 show_downloads: false
+github:
+  is_project_page: true
+  repository_url: https://github.com/Royelau76/ai-news-daily
