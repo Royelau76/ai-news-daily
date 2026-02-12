@@ -1,10 +1,9 @@
-name: Generate AI Daily News
+name: Generate and Deploy AI Daily News
 
 on:
   schedule:
-    # 每天 UTC 00:00 运行 (北京时间 08:00)
-    - cron: '0 0 * * *'
-  workflow_dispatch:  # 允许手动触发
+    - cron: '0 0 * * *'  # UTC 00:00
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  generate:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,35 +26,16 @@ jobs:
         with:
           python-version: '3.11'
       
-      - name: Install dependencies
-        run: |
-          pip install requests
-      
       - name: Generate daily news
-        run: |
-          python generate_daily.py
-        env:
-          OPENCLAW_AVAILABLE: true
+        run: python generate_daily.py
       
-      - name: Commit and push
+      - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
           git commit -m "Update AI Daily News - $(date +'%Y-%m-%d')" || echo "No changes"
-          git push
-
-  deploy:
-    needs: generate
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: main
+          git push || echo "Push failed"
       
       - name: Setup Pages
         uses: actions/configure-pages@v5
