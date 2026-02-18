@@ -113,4 +113,28 @@ git push
 
 ---
 
-*最后更新: 2026-02-12 23:56*
+## ⚠️ 踩坑记录 (Mistakes)
+
+### [M-001] 备份脚本漏掉 3-file pattern 文件
+**发现时间**: 2026-02-13
+**场景**: 记忆文件自动备份
+
+**问题**:
+- 重构 MEMORY.md 为 3-file pattern (tasks.md, learnings.md, decisions.md)
+- 但 backup-memory.sh 脚本只备份了旧的 6 个文件
+- 导致新结构下的重要记忆文件没有备份
+
+**解决**:
+```bash
+# 在备份脚本中新增
+# 2. 3-file pattern 记忆文件
+cp -v "$SOURCE_DIR/tasks.md" "$BACKUP_DIR/" 
+cp -v "$SOURCE_DIR/learnings.md" "$BACKUP_DIR/" 
+cp -v "$SOURCE_DIR/decisions.md" "$BACKUP_DIR/"
+```
+
+**教训**: 重构文件结构后，记得同步更新备份脚本！
+
+---
+
+*最后更新: 2026-02-13 10:20*
