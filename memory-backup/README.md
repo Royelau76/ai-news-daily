@@ -2,8 +2,8 @@
 
 ## 📅 最新备份
 
-- **日期**: 2026-02-20
-- **时间**: 09:00:07
+- **日期**: 2026-02-23
+- **时间**: 10:14:29
 - **来源**: /root/.openclaw/workspace
 
 ## 📁 备份内容
@@ -16,6 +16,11 @@
 | SOUL.md | 核心人格 |
 | AGENTS.md | 代理配置 |
 | TOOLS.md | 工具配置 |
+| decisions.md | 决策记录 |
+| learnings.md | 学习记录 |
+| tasks.md | 任务列表 |
+| memory/*.md | 每日记忆日志 |
+| openclaw.json | 全域设定档 |
 
 ## 🔄 自动备份
 
