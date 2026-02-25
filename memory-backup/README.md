@@ -2,8 +2,8 @@
 
 ## 📅 最新备份
 
-- **日期**: 2026-02-23
-- **时间**: 10:14:29
+- **日期**: 2026-02-25
+- **时间**: 09:00:11
 - **来源**: /root/.openclaw/workspace
 
 ## 📁 备份内容
@@ -14,15 +14,17 @@
 | IDENTITY.md | AI身份配置 |
 | USER.md | 用户信息 |
 | SOUL.md | 核心人格 |
-| AGENTS.md | 代理配置 |
-| TOOLS.md | 工具配置 |
-| decisions.md | 决策记录 |
-| learnings.md | 学习记录 |
-| tasks.md | 任务列表 |
-| memory/*.md | 每日记忆日志 |
+| CONFIG.md | 配置与操作指南（新） |
+| learnings.md | 学习与决策记录 |
+| memory/*.md | 每日记忆+周总结+专题 |
 | openclaw.json | 全域设定档 |
+| agents-main-agent/ | Agent模型配置 |
 
-## 🔄 自动备份
+## 📅 归档机制
+
+- 每日记忆保留最近7天
+- 每周日合并为周总结
+- 专题文件长期保留
 
 - **频率**: 每天
 - **时间**: 自动执行

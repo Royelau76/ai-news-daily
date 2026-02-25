@@ -5,14 +5,16 @@
 
 ---
 
-## 📁 记忆文件结构
+## 📁 记忆文件结构（2026-02-24 更新）
 
 | 文件 | 用途 | 更新频率 |
 |------|------|----------|
-| [tasks.md](./tasks.md) | 当前任务、目标、待办 | 任务变更时 |
-| [learnings.md](./learnings.md) | 学习总结、踩坑记录 | 有新发现时 |
-| [decisions.md](./decisions.md) | 重要决策及原因 | 做重大选择时 |
-| [memory/YYYY-MM-DD.md](./memory/) | 每日进展 | 每天 |
+| [CONFIG.md](./CONFIG.md) | 配置、操作指南、决策记录 | 有变更时 |
+| [learnings.md](./learnings.md) | 学习总结、踩坑记录、决策 | 有新发现时 |
+| [memory/YYYY-MM-DD.md](./memory/) | 每日进展（保留7天） | 每天 |
+| [memory/专题.md](./memory/) | 专题记忆（高考、项目等） | 专题相关时 |
+
+**归档机制**: 每周日将7天记忆合并为周总结，删除原始日文件
 
 **核心原则**: Read Before Decide | 2-Action Rule | Log ALL Errors
 
@@ -33,13 +35,15 @@
 详见 [USER.md](./USER.md)
 
 - **称呼**: 瑞哥
+- **所在地**: 昆明
+- **子女**: 儿子2026年参加高考（目标：南方科技大学）
 - **宠物**: 十一（贵宾犬，2017年7月23日生）
 
 ---
 
 ## 🛠️ 工具配置
 
-详见 [TOOLS.md](./TOOLS.md) 和 [AGENTS.md](./AGENTS.md)
+详见 [CONFIG.md](./CONFIG.md)
 
 ---
 

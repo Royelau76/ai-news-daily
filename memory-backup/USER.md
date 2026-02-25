@@ -5,8 +5,9 @@
 - **Name:** 瑞哥
 - **What to call them:** 瑞哥
 - **Pronouns:** *(optional)*
-- **Timezone:** 
+- **Timezone:** Asia/Shanghai
 - **Notes:** 
+- 儿子2026年参加高考 
 
 ## Context
 
