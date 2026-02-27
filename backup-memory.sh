@@ -19,13 +19,23 @@ mkdir -p "$BACKUP_DIR"
 # 备份文件列表
 echo "📁 备份以下文件:"
 
-# 1. 核心记忆文件
+# 1. 核心记忆文件（2026-02-24 更新后）
 cp -v "$SOURCE_DIR/MEMORY.md" "$BACKUP_DIR/" 2>/dev/null || echo "⚠️ MEMORY.md 不存在"
 cp -v "$SOURCE_DIR/IDENTITY.md" "$BACKUP_DIR/" 2>/dev/null || echo "⚠️ IDENTITY.md 不存在"
 cp -v "$SOURCE_DIR/USER.md" "$BACKUP_DIR/" 2>/dev/null || echo "⚠️ USER.md 不存在"
 cp -v "$SOURCE_DIR/SOUL.md" "$BACKUP_DIR/" 2>/dev/null || echo "⚠️ SOUL.md 不存在"
-cp -v "$SOURCE_DIR/AGENTS.md" "$BACKUP_DIR/" 2>/dev/null || echo "⚠️ AGENTS.md 不存在"
-cp -v "$SOURCE_DIR/TOOLS.md" "$BACKUP_DIR/" 2>/dev/null || echo "⚠️ TOOLS.md 不存在"
+cp -v "$SOURCE_DIR/CONFIG.md" "$BACKUP_DIR/" 2>/dev/null || echo "⚠️ CONFIG.md 不存在"
+cp -v "$SOURCE_DIR/learnings.md" "$BACKUP_DIR/" 2>/dev/null || echo "⚠️ learnings.md 不存在"
+
+# 2. 备份全域设定文件
+cp -v "$HOME/.openclaw/openclaw.json" "$BACKUP_DIR/" 2>/dev/null || echo "⚠️ openclaw.json 不存在"
+
+# 3. 备份 agents 模型配置
+if [ -d "$HOME/.openclaw/agents/main/agent" ]; then
+    echo "📂 备份 agents/main/agent/ 目录..."
+    mkdir -p "$BACKUP_DIR/agents-main-agent"
+    cp -r "$HOME/.openclaw/agents/main/agent/"* "$BACKUP_DIR/agents-main-agent/" 2>/dev/null || true
+fi
 
 # 2. 记忆目录下的每日文件
 if [ -d "$SOURCE_DIR/memory" ]; then
@@ -51,10 +61,17 @@ cat > "$BACKUP_DIR/README.md" << EOF
 | IDENTITY.md | AI身份配置 |
 | USER.md | 用户信息 |
 | SOUL.md | 核心人格 |
-| AGENTS.md | 代理配置 |
-| TOOLS.md | 工具配置 |
+| CONFIG.md | 配置与操作指南（新） |
+| learnings.md | 学习与决策记录 |
+| memory/*.md | 每日记忆+周总结+专题 |
+| openclaw.json | 全域设定档 |
+| agents-main-agent/ | Agent模型配置 |
 
-## 🔄 自动备份
+## 📅 归档机制
+
+- 每日记忆保留最近7天
+- 每周日合并为周总结
+- 专题文件长期保留
 
 - **频率**: 每天
 - **时间**: 自动执行
