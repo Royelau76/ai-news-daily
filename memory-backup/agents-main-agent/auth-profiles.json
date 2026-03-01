@@ -4,7 +4,7 @@
     "kimi-coding:default": {
       "type": "api_key",
       "provider": "kimi-coding",
-      "key": "sk-kimi-vgRyFXGjBNxtl5Hjxm8DucoGeWyrKMZK9WeLJde5b1vbYWmRrm1Yg5ifBXlTEfvs"
+      "key": "sk-mAYkGW1ZRW6hvE89yVRPoPQK7nxvFHV11XJpELZUpCLOlMfq"
     }
   },
   "lastGood": {
@@ -12,9 +12,9 @@
   },
   "usageStats": {
     "kimi-coding:default": {
-      "lastUsed": 1772194337443,
+      "lastUsed": 1772240821508,
       "errorCount": 0,
-      "lastFailureAt": 1772182872478
+      "lastFailureAt": 1772240821459
     }
   }
 }
