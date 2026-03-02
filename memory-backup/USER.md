@@ -1,3 +1,8 @@
+---
+tags: [user]
+updated: 2026-02-28
+---
+
 # USER.md - About Your Human
 
 *Learn about the person you're helping. Update this as you go.*

@@ -1,3 +1,8 @@
+---
+tags: [agent]
+updated: 2026-02-20
+---
+
 # IDENTITY.md - Who Am I?
 
 *Fill this in during your first conversation. Make it yours.*

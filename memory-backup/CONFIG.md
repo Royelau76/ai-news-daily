@@ -1,3 +1,8 @@
+---
+tags: [config, agent]
+updated: 2026-02-24
+---
+
 # CONFIG.md - 配置与操作指南
 
 ## 🏠 工作空间规范

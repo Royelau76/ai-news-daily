@@ -1,3 +1,8 @@
+---
+tags: [learnings, config]
+updated: 2026-02-24
+---
+
 # 🧠 学习与决策记录
 
 > 知识积累 + 重大决策
